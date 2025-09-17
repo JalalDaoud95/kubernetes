@@ -1,12 +1,26 @@
 FROM rockylinux:8
-MAINTAINER jalal.h.daoud@gmail.com
+
+LABEL maintainer="jalal.h.daoud@gmail.com"
+
+# Install required packages
 RUN yum install -y httpd \
- zip\
- unzip
-ADD https://www.free-css.com/assets/files/free-css-templates/download/page254/photogenic.zip /var/www/html/
+    zip \
+    unzip \
+    && yum clean all
+
+# Copy the template archive (you must download it and place it in your repo first)
+COPY photogenic.zip /var/www/html/
+
+# Set working directory
 WORKDIR /var/www/html/
-RUN unzip photogenic.zip
-RUN cp -rvf photogenic/* .
-RUN rm -rf photogenic photogenic.zip
-CMD ["/usr/sbin/httpd","-D","FOREGROUND"]
+
+# Extract and organize files
+RUN unzip photogenic.zip && \
+    cp -rvf photogenic/* . && \
+    rm -rf photogenic photogenic.zip
+
+# Expose ports
 EXPOSE 80 22
+
+# Run Apache in foreground
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]

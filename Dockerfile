@@ -1,26 +1,11 @@
-FROM rockylinux:8
+# Use an official Python runtime as a parent image
+FROM python:3.10-slim
 
-LABEL maintainer="jalal.h.daoud@gmail.com"
+# Set the working directory inside the container
+WORKDIR /app
 
-# Install required packages
-RUN yum install -y httpd \
-    zip \
-    unzip \
-    && yum clean all
+# Copy a sample Python script into the container
+COPY test_script.py .
 
-# Copy the template archive (you must download it and place it in your repo first)
-COPY photogenic.zip /var/www/html/
-
-# Set working directory
-WORKDIR /var/www/html/
-
-# Extract and organize files
-RUN unzip photogenic.zip && \
-    cp -rvf photogenic/* . && \
-    rm -rf photogenic photogenic.zip
-
-# Expose ports
-EXPOSE 80 22
-
-# Run Apache in foreground
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+# Run the Python script when the container starts
+CMD ["python", "test_script.py"]

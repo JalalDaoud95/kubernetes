@@ -1,4 +1,4 @@
-FROM centos:latest
+FROM rockylinux:8
 MAINTAINER jalal.h.daoud@gmail.com
 RUN yum install -y httpd \
  zip\
